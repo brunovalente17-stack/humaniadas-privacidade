@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Criar um tema — Humaníadas</title>
+<meta name="description" content="Manual para criar e importar um tema próprio na aplicação Humaníadas. Inclui uma secção para assistentes de IA (LLM) criarem o tema a partir de uma imagem.">
+<style>
+:root { --bg: #f6f1e7; --fg: #2b211b; --muted: #6b5a4c; --accent: #9c3b2b; --rule: #d9cdb8; --code: #ece4d4; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #141a2b; --fg: #efe6d4; --muted: #b9ab93; --accent: #e0b25c; --rule: #33405c; --code: #1d2540; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 17px/1.6 Georgia, "Times New Roman", serif; }
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 16px 4rem; }
+h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 1rem; }
+h2 { font-size: 1.3rem; margin: 2.2rem 0 .5rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.05rem; margin: 1.5rem 0 .4rem; }
+p, li, td { overflow-wrap: anywhere; }
+a { color: var(--accent); }
+nav { font: 15px/1.4 system-ui, sans-serif; color: var(--muted); margin-bottom: 2rem; }
+nav a { margin-right: 1rem; }
+code { background: var(--code); padding: 0 .25em; border-radius: 3px; font-size: .9em; }
+pre { background: var(--code); padding: 12px; border-radius: 6px; overflow-x: auto; font-size: 13px; line-height: 1.45; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; margin: .5rem 0 1rem; }
+th, td { text-align: left; border-bottom: 1px solid var(--rule); padding: 6px 8px 6px 0; vertical-align: top; }
+.tip { border-left: 3px solid var(--accent); padding: .2rem 0 .2rem 1rem; margin: 1rem 0; }
+#llm { border: 2px dashed var(--accent); border-radius: 8px; padding: 0 16px 16px; margin-top: 2.5rem; }
+#llm h2 { border-top: 0; }
+footer { margin-top: 3rem; font: 14px/1.4 system-ui, sans-serif; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+<nav><a href="index.html">Política de Privacidade</a> <a href="#ia">Criar com um assistente de IA</a> <a href="#llm">For AI assistants</a></nav>
+
+<h1>Criar um tema para o Humaníadas</h1>
+<p>Um tema muda o fundo, as cores e as letras da aplicação. Além dos temas da aplicação, pode importar um tema feito por si, por exemplo com uma fotografia sua. O tema fica só no seu telemóvel: não é enviado para lado nenhum e não é preciso comprar nada.</p>
+<p>Há duas maneiras de o fazer:</p>
+<ul>
+<li><strong>Com um assistente de IA</strong> (ChatGPT, Claude, Gemini ou outro): dá-lhe o endereço desta página e uma imagem, e ele prepara o ficheiro. É a maneira mais simples. <a href="#ia">Ver como</a>.</li>
+<li><strong>À mão</strong>, seguindo os passos abaixo. Precisa de um editor de imagem e de um editor de texto.</li>
+</ul>
+
+<h2 id="ia">Criar com um assistente de IA</h2>
+<ol>
+<li>Escolha uma imagem sua ou que tenha o direito de usar, de preferência vertical e com boa resolução.</li>
+<li>Abra um assistente que consiga <strong>ler páginas da internet, correr código e devolver ficheiros</strong> (por exemplo, ChatGPT com análise de dados ou Claude com ficheiros).</li>
+<li>Anexe a imagem e escreva, por exemplo:
+<pre><code>Lê https://brunovalente17-stack.github.io/humaniadas-privacidade/temas.html
+e cria-me um tema do Humaníadas com esta imagem.
+Nome do tema: Praia de inverno. Autor: Ana.</code></pre></li>
+<li>O assistente devolve um ficheiro <code>.zip</code>. Guarde-o no telemóvel (por exemplo, na pasta Transferências).</li>
+<li>Importe-o na aplicação, como explicado em <a href="#importar">Importar o tema</a>.</li>
+</ol>
+<p class="tip">Se o assistente não conseguir abrir a página, copie para a conversa o conteúdo da secção <a href="#llm">«For AI assistants»</a>, no fim desta página.</p>
+
+<h2>O que é um tema, por dentro</h2>
+<p>Um tema é um ficheiro <code>.zip</code> com estes ficheiros, todos na raiz (sem pastas à volta):</p>
+<table>
+<tr><th>Ficheiro</th><th>O que é</th><th>Obrigatório</th></tr>
+<tr><td><code>skin.json</code></td><td>A descrição do tema: nome, cores e letras.</td><td>Sim</td></tr>
+<tr><td><code>background.webp</code> ou <code>.png</code></td><td>A imagem de fundo, vertical.</td><td>Sim</td></tr>
+<tr><td><code>thumbnail.webp</code> ou <code>.png</code></td><td>A miniatura que aparece na lista de temas.</td><td>Sim</td></tr>
+<tr><td><code>background-wide.webp</code> ou <code>.png</code></td><td>Um fundo horizontal, para tablets e ecrã deitado.</td><td>Não</td></tr>
+<tr><td>imagens de zonas e elementos</td><td>Faixa do topo, medalhões, moldura do poema, ícone da sequência. Ver <a href="#avancado">Opções avançadas</a>.</td><td>Não</td></tr>
+</table>
+
+<h2>Passo a passo, à mão</h2>
+<h3>1. A imagem de fundo</h3>
+<ul>
+<li>Vertical, na proporção de <strong>1080 × 2340</strong> (a de um telemóvel), com uma tolerância de 2 %.</li>
+<li>No mínimo 1080 × 2340 píxeis e no máximo 2160 × 4680.</li>
+<li>Até 5 MB. Recomendado: WebP com qualidade perto de 80.</li>
+<li>Guarde-a como <code>background.webp</code> (ou <code>background.png</code>; nunca os dois).</li>
+</ul>
+<p class="tip">O poema é escrito por cima da parte central da imagem. Imagens calmas ao centro (céu, mar, papel, tecido) ficam melhor do que imagens com muito detalhe.</p>
+<h3>2. A miniatura</h3>
+<p>A mesma imagem, mais pequena: no máximo 540 × 1170 píxeis e 1 MB. Guarde-a como <code>thumbnail.webp</code> (ou <code>.png</code>).</p>
+<h3>3. O ficheiro <code>skin.json</code></h3>
+<p>Crie um ficheiro de texto chamado <code>skin.json</code> (codificação UTF-8) com este conteúdo e mude os valores:</p>
+<pre><code>{
+  "formatVersion": 1,
+  "id": "meu-tema-praia",
+  "name": { "pt-PT": "Praia de inverno", "pt-BR": "Praia de inverno", "en": "Winter beach" },
+  "author": "Ana",
+  "palette": {
+    "background": "#0E1A24",
+    "surface": "#16283A",
+    "text": "#F5F0E8",
+    "textSecondary": "#CDC6BA",
+    "accent": "#8FC3E0",
+    "dialFace": "#16283A",
+    "dialHighlight": "#8FC3E0",
+    "banner": "#2B4A63"
+  },
+  "fonts": { "title": "Cormorant Garamond", "body": "Literata" },
+  "overlay": { "color": "#000000", "opacity": 0.35 }
+}</code></pre>
+<table>
+<tr><th>Campo</th><th>Regras</th></tr>
+<tr><td><code>formatVersion</code></td><td>Sempre <code>1</code>.</td></tr>
+<tr><td><code>id</code></td><td>Só letras minúsculas sem acentos, algarismos e hífenes, por exemplo <code>meu-tema-praia</code>. Não pode ser o identificador de um tema da aplicação (<code>standard</code>, <code>aurora</code>, <code>tinta</code>, <code>noturna</code> e os da loja). Começar por <code>meu-</code> evita conflitos.</td></tr>
+<tr><td><code>name</code></td><td>O nome que aparece na aplicação, em <code>pt-PT</code>, <code>pt-BR</code> e <code>en</code> (pode repetir o mesmo nome).</td></tr>
+<tr><td><code>author</code></td><td>O seu nome.</td></tr>
+<tr><td><code>palette</code></td><td>Oito cores no formato <code>#RRGGBB</code>, todas obrigatórias (ver a tabela seguinte).</td></tr>
+<tr><td><code>fonts</code></td><td><code>title</code> (títulos) e <code>body</code> (texto) escolhidas entre: Literata, Cormorant Garamond, Source Serif 4, Inter, Lora, Noto Serif. Escreva o nome exatamente assim.</td></tr>
+<tr><td><code>overlay</code></td><td>Opcional. Um véu de cor por cima da imagem, para o texto se ler bem; <code>opacity</code> vai de 0 (invisível) a 1 (cor sólida).</td></tr>
+</table>
+<p>As cores da paleta:</p>
+<table>
+<tr><th>Cor</th><th>Onde aparece</th></tr>
+<tr><td><code>background</code></td><td>O fundo, por baixo da imagem e enquanto ela carrega.</td></tr>
+<tr><td><code>surface</code></td><td>Cartões, folhas e caixas.</td></tr>
+<tr><td><code>text</code></td><td>O texto principal, incluindo o poema.</td></tr>
+<tr><td><code>textSecondary</code></td><td>Texto secundário (datas, notas, legendas).</td></tr>
+<tr><td><code>accent</code></td><td>Botões, ligações e destaques.</td></tr>
+<tr><td><code>dialFace</code>, <code>dialHighlight</code></td><td>Os mostradores do sorteio do poema e o seu realce.</td></tr>
+<tr><td><code>banner</code></td><td>A faixa do topo, quando o tema não tem imagem própria para ela.</td></tr>
+</table>
+<p class="tip">Fundo escuro pede texto claro, e fundo claro pede texto escuro. O <code>accent</code> deve destacar-se bem sobre o <code>surface</code>.</p>
+<h3>4. Criar o ficheiro .zip</h3>
+<p>Selecione os ficheiros (<code>skin.json</code>, <code>background.webp</code>, <code>thumbnail.webp</code>) e comprima-os num <code>.zip</code>. Os ficheiros têm de ficar na raiz do <code>.zip</code>: não comprima a pasta que os contém.</p>
+
+<h2 id="importar">Importar o tema</h2>
+<ol>
+<li>Copie o <code>.zip</code> para o telemóvel.</li>
+<li>Na aplicação, em <strong>Hoje</strong>, toque em <strong>Personalizar</strong> e depois em <strong>Temas</strong>.</li>
+<li>Toque no ícone <strong>Importar tema</strong> (a seta para cima, no topo do ecrã).</li>
+<li>Toque em <strong>Escolher ficheiro .zip</strong> e escolha o ficheiro.</li>
+<li>Veja a <strong>Pré-visualização</strong> e toque em <strong>Guardar tema</strong>.</li>
+</ol>
+<p>O tema aparece na lista de temas, marcado como «Meu tema». Para o apagar, use <strong>Apagar tema</strong>. Os temas importados vão nas cópias de segurança da aplicação.</p>
+
+<h2>Se o tema for recusado</h2>
+<table>
+<tr><th>Mensagem</th><th>O que fazer</th></tr>
+<tr><td>«O ficheiro não é um pacote de tema válido.»</td><td>Verifique se o <code>skin.json</code> está na raiz do <code>.zip</code>, se o JSON está bem escrito (vírgulas e aspas), se as oito cores existem no formato <code>#RRGGBB</code>, se as letras estão na lista e se as imagens têm as medidas certas.</td></tr>
+<tr><td>«O ficheiro é demasiado grande (máximo 40 MB).»</td><td>Reduza as imagens ou guarde-as em WebP.</td></tr>
+<tr><td>«Esta imagem pertence a um tema da loja e não pode ser importada.»</td><td>As imagens dos temas da loja não podem ser reutilizadas. Use uma imagem sua.</td></tr>
+<tr><td>«Este identificador está reservado a um tema da aplicação.»</td><td>Mude o <code>id</code> no <code>skin.json</code>, por exemplo para <code>meu-…</code>.</td></tr>
+<tr><td>«As cores do texto e do fundo deste tema são demasiado parecidas…»</td><td>Escolha uma cor de <code>text</code> que contraste com a imagem (clara sobre imagem escura, escura sobre imagem clara).</td></tr>
+<tr><td>«Ajustámos o véu sobre a imagem (n %)…»</td><td>Não é um erro: a aplicação escureceu ou clareou a imagem o suficiente para o poema se ler bem.</td></tr>
+</table>
+
+<h2 id="avancado">Opções avançadas</h2>
+<p>Todos estes campos são opcionais. Cada imagem que indicar tem de estar no <code>.zip</code>, no caminho indicado.</p>
+<pre><code>"zones": { "z1": "zones/faixa.webp", "z3": "zones/medalhao.webp" },
+"scrim": { "color": "#0E1A24", "opacity": 0.5 },
+"elements": {
+  "poemFrame": { "file": "elements/moldura.webp", "slice": [72, 72, 72, 72], "contentPadding": [24, 24, 24, 24] },
+  "streakIcon": { "file": "elements/sequencia.webp" },
+  "badge": { "file": "elements/selo.webp" }
+}</code></pre>
+<table>
+<tr><th>Campo</th><th>Regras</th></tr>
+<tr><td><code>zones.z1</code></td><td>A faixa do topo do Hoje e do sorteio: proporção 4:1, de 512 × 128 a 2048 × 512 píxeis, até 5 MB.</td></tr>
+<tr><td><code>zones.z3</code>, <code>zones.z4</code></td><td>Medalhões esquerdo e direito: quadrados, de 256 × 256 a 1024 × 1024 píxeis, até 5 MB.</td></tr>
+<tr><td><code>scrim</code></td><td>Como o <code>overlay</code>, mas só por trás do bloco do poema.</td></tr>
+<tr><td><code>poemFrame</code></td><td>Uma moldura à volta do poema, desenhada a 3× (uma margem de 72 píxeis ocupa 24 dp no ecrã). <code>slice</code> diz quantos píxeis da imagem são margem em cada lado (esquerda, topo, direita, fundo). Entre 96 e 2048 píxeis por lado, até 1 MB. <code>contentPadding</code> (opcional, até 96 por lado) é a distância do texto à borda da moldura, e nunca pode ser menor do que a margem a dividir por 3.</td></tr>
+<tr><td><code>streakIcon</code>, <code>badge</code></td><td>O ícone da sequência e o selo: quadrados, de 256 a 1024 píxeis, até 1 MB.</td></tr>
+</table>
+<p>Limites do <code>.zip</code>: até 40 MB, 200 ficheiros e 60 MB descomprimido. Os nomes dos ficheiros usam <code>/</code> e não podem começar por <code>/</code> nem conter <code>..</code>. As imagens podem ser PNG ou WebP, e a extensão tem de corresponder ao formato real do ficheiro.</p>
+
+<h2>Regras de utilização</h2>
+<ul>
+<li>Use apenas imagens suas ou que tenha o direito de usar.</li>
+<li>Os temas importados servem para uso pessoal no seu dispositivo. A aplicação não os publica nem os partilha.</li>
+<li>As imagens dos temas pagos da loja não podem ser reutilizadas; a aplicação deteta-as e recusa-as.</li>
+</ul>
+
+<section id="llm" lang="en">
+<h2>For AI assistants (LLM instructions)</h2>
+<p><strong>You are helping a user of the Android app Humaníadas create a custom theme ("tema", internally "skin") from an image.</strong> The user has given you this page's URL and, usually, an image. Follow these instructions. Reply to the user in the language they wrote in (usually Portuguese), in plain non-technical words.</p>
+
+<h3>Goal</h3>
+<p>Produce ONE <code>.zip</code> file that the app's importer accepts, and give it to the user as a downloadable file. Then tell them how to import it: on the phone, Hoje › Personalizar › Temas › the upload icon "Importar tema" › "Escolher ficheiro .zip" › "Guardar tema".</p>
+
+<h3>Steps</h3>
+<ol>
+<li>Ask for anything missing, in ONE short message: the image (required), a theme name, the author's name. Optional: a preference for a light or dark theme and for fonts. Do not ask about anything else; choose sensible defaults.</li>
+<li>Only use an image the user provided or confirms they have the right to use. Do not use artwork copied from the app's paid themes; the app rejects it anyway.</li>
+<li>If you can run Python: run the script below exactly as written (it needs Pillow) and return the resulting zip. The script does the cropping, the palette, the contrast check and the packaging.</li>
+<li>If you cannot run code: say so plainly. Then give the user (a) a complete <code>skin.json</code> derived from the image's colours, following the specification below, and (b) simple instructions to resize the image to 1080 × 2340 (background) and 540 × 1170 (thumbnail) and zip the three files at the zip's root.</li>
+<li>After building the zip, report in one or two sentences: the theme name, light or dark, the fonts, and that the text contrast passed.</li>
+</ol>
+
+<h3>Specification (the importer's rules)</h3>
+<pre><code>ZIP (all paths relative, '/' separators, no '..', no leading '/', no wrapping folder):
+  skin.json                      required, UTF-8 JSON (schema below)
+  background.webp|.png           required; portrait; aspect 1080:2340 ± 2 %;
+                                 min 1080×2340, max 2160×4680; ≤ 5 MB
+  thumbnail.webp|.png            required; max 540×1170; ≤ 1 MB
+  background-wide.webp|.png      optional; landscape (w &gt; h); max 4680×2160; ≤ 5 MB
+  never both .png and .webp for the same stem; the extension must match the bytes
+  zip ≤ 40 MB; ≤ 200 entries; ≤ 60 MB uncompressed; no symlinks
+
+skin.json:
+  formatVersion   1 (integer, exactly)
+  id              ^[a-z0-9]+(-[a-z0-9]+)*$ ; not reserved. Reserved: standard, aurora, tinta,
+                  noturna, bookish-gold, coracao-rosas, coracao-ternura, fourteen-portals,
+                  zodiac-wheel, zodiac-red, zodiac-red-* . Prefer a "meu-" prefix.
+  name            {"pt-PT": str, "pt-BR": str, "en": str}   non-empty strings
+  author          str
+  palette         8 required "#RRGGBB" colours: background, surface, text, textSecondary,
+                  accent, dialFace, dialHighlight, banner
+  fonts           {"title": F, "body": F}, F ∈ {"Literata", "Cormorant Garamond",
+                  "Source Serif 4", "Inter", "Lora", "Noto Serif"} (exact spelling)
+  overlay         optional {"color": "#RRGGBB", "opacity": 0..1}  (veil over the image)
+  scrim           optional, same shape; painted only behind the poem text block
+  family          optional id-like string (omit it)
+  zones           optional {"z1"|"z3"|"z4": "path/in/zip"}; z1 banner 4:1, 512×128..2048×512;
+                  z3/z4 medallions 1:1, 256..1024 px; each ≤ 5 MB
+  elements        optional {"poemFrame": {"file", "slice": [l,t,r,b] px, "contentPadding":
+                  [l,t,r,b] dp ≤ 96, each ≥ slice/3}, "streakIcon": {"file"}, "badge": {"file"}};
+                  frame 96..2048 px a side, authored at 3× density; icons square 256..1024 px;
+                  each element ≤ 1 MB
+
+Legibility (checked on import): sample a 32×48 grid over the background's central region
+(x 10–90 %, y 20–80 %); composite each sample over palette.background (alpha), then overlay,
+then scrim; compute the WCAG contrast of palette.text against each; the 10th-percentile
+(worst decile) must be ≥ 4.5:1. If not, the app raises the overlay itself, and refuses the
+theme only when no overlay opacity reaches 4.5:1.
+Also aim for: textSecondary ≥ 4.5:1 the same way; accent vs surface ≥ 4.5:1.
+
+Palette guidance: dark image → light text (#F5F0E8-ish), dark background/surface derived from
+the image's average colour; light image → dark text (#221A14-ish), light background/surface.
+dialFace = surface, dialHighlight = accent, banner = a mid tone between background and accent.</code></pre>
+
+<h3>Script (Python 3 + Pillow)</h3>
+<p>Save as <code>make_skin.py</code> and run, for example:<br>
+<code>python make_skin.py photo.jpg --id meu-tema-praia --name "Praia de inverno" --author "Ana"</code><br>
+Options: <code>--mode auto|dark|light</code>, <code>--title-font</code>, <code>--body-font</code>, <code>--out file.zip</code>. Derive the <code>id</code> from the name: lowercase, no accents, spaces → hyphens, prefixed with <code>meu-</code>.</p>
+<pre><code>"""Builds a Humaníadas theme package (.zip) from one image.
+
+Usage:  python make_skin.py IMAGE --id my-theme --name "My theme" --author "Name"
+        [--title-font Lora] [--body-font Literata] [--mode auto|dark|light] [--out my-theme.zip]
+Needs Pillow (pip install pillow). Writes the zip next to the image unless --out is given.
+"""
+
+from __future__ import annotations
+
+import argparse
+import io
+import json
+import re
+import zipfile
+from pathlib import Path
+
+from PIL import Image, ImageOps
+
+W, H = 1080, 2340                 # portrait background, ratio 1080:2340 (± 2 %)
+THUMB = (540, 1170)               # thumbnail, at most 540×1170
+FONTS = ["Literata", "Cormorant Garamond", "Source Serif 4", "Inter", "Lora", "Noto Serif"]
+RESERVED = {"standard", "aurora", "tinta", "noturna", "bookish-gold", "coracao-rosas",
+            "coracao-ternura", "fourteen-portals", "zodiac-wheel", "zodiac-red"}
+ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+def lum(r: float, g: float, b: float) -&gt; float:
+    def ch(c: float) -&gt; float:
+        s = c / 255
+        return s / 12.92 if s &lt;= 0.03928 else ((s + 0.055) / 1.055) ** 2.4
+    return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b)
+
+
+def ratio(a: float, b: float) -&gt; float:
+    return (max(a, b) + 0.05) / (min(a, b) + 0.05)
+
+
+def hex_of(rgb) -&gt; str:
+    return "#%02X%02X%02X" % tuple(int(round(c)) for c in rgb[:3])
+
+
+def rgb_of(h: str):
+    return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
+
+
+def samples(img: Image.Image):
+    """The app's 32×48 samples of the central text region (x 10–90 %, y 20–80 %)."""
+    w, h = img.size
+    px = img.convert("RGBA").load()
+    out = []
+    for j in range(48):
+        y = min(h - 1, int(0.2 * h + (j + 0.5) * (0.6 * h) / 48))
+        for i in range(32):
+            x = min(w - 1, int(0.1 * w + (i + 0.5) * (0.8 * w) / 32))
+            out.append(px[x, y])
+    return out
+
+
+def worst_decile(s, text, background, overlay=None, scrim=None) -&gt; float:
+    tl = lum(*text)
+    rs = []
+    for r, g, b, a in s:
+        a /= 255
+        c = [v * a + bg * (1 - a) for v, bg in zip((r, g, b), background)]
+        for layer in (overlay, scrim):
+            if layer:
+                col, op = layer
+                c = [v * (1 - op) + lc * op for v, lc in zip(c, col)]
+        rs.append(ratio(tl, lum(*c)))
+    rs.sort()
+    return rs[int(0.1 * (len(rs) - 1))]
+
+
+def mix(a, b, t):
+    return tuple(x * (1 - t) + y * t for x, y in zip(a, b))
+
+
+def build(image: Path, sid: str, name: str, author: str, title_font: str, body_font: str,
+          mode: str, out: Path) -&gt; dict:
+    if not ID_RE.match(sid) or sid in RESERVED or sid.startswith("zodiac-red-"):
+        raise SystemExit(f"id '{sid}' is invalid or reserved: use lowercase letters, digits and "
+                         "hyphens, e.g. 'meu-tema-praia'")
+    for f in (title_font, body_font):
+        if f not in FONTS:
+            raise SystemExit(f"font '{f}' is not available; choose one of {FONTS}")
+
+    src = ImageOps.exif_transpose(Image.open(image)).convert("RGB")
+    bg = ImageOps.fit(src, (W, H), Image.LANCZOS, centering=(0.5, 0.5))
+    thumb = bg.resize(THUMB, Image.LANCZOS)
+
+    s = samples(bg)
+    avg = tuple(sum(p[k] for p in s) / len(s) for k in range(3))
+    dark = (lum(*avg) &lt; 0.35) if mode == "auto" else (mode == "dark")
+    # Palette derived from the image's average colour of the text region.
+    if dark:
+        background = mix(avg, (0, 0, 0), 0.75)
+        surface = mix(avg, (0, 0, 0), 0.6)
+        text = (245, 240, 232)
+        text2 = (205, 198, 186)
+        accent = mix(avg, (255, 255, 255), 0.55)
+        overlay_col = (0, 0, 0)
+    else:
+        background = mix(avg, (255, 255, 255), 0.8)
+        surface = mix(avg, (255, 255, 255), 0.9)
+        text = (34, 26, 20)
+        text2 = (88, 74, 62)
+        accent = mix(avg, (0, 0, 0), 0.55)
+        overlay_col = (255, 255, 255)
+    # Accent must read on the surface (≥ 4.5:1): push it further if needed.
+    t = 0.55
+    while ratio(lum(*accent), lum(*surface)) &lt; 4.5 and t &lt; 1:
+        t += 0.05
+        accent = mix(avg, (255, 255, 255) if dark else (0, 0, 0), t)
+
+    # Smallest overlay (k/100) giving the poem text 4.5:1, plus a small margin.
+    opacity = None
+    for k in range(0, 101):
+        if worst_decile(s, text, background, (overlay_col, k / 100)) &gt;= 4.5:
+            opacity = min(1.0, k / 100 + 0.05)
+            break
+    if opacity is None:
+        raise SystemExit("no overlay makes the text readable; try --mode dark or --mode light")
+
+    manifest = {
+        "formatVersion": 1,
+        "id": sid,
+        "name": {"pt-PT": name, "pt-BR": name, "en": name},
+        "author": author,
+        "palette": {
+            "background": hex_of(background),
+            "surface": hex_of(surface),
+            "text": hex_of(text),
+            "textSecondary": hex_of(text2),
+            "accent": hex_of(accent),
+            "dialFace": hex_of(surface),
+            "dialHighlight": hex_of(accent),
+            "banner": hex_of(mix(background, accent, 0.35)),
+        },
+        "fonts": {"title": title_font, "body": body_font},
+        "overlay": {"color": hex_of(overlay_col), "opacity": round(opacity, 2)},
+    }
+
+    def webp(img: Image.Image, q: int) -&gt; bytes:
+        buf = io.BytesIO()
+        img.save(buf, "WEBP", quality=q, method=6)
+        return buf.getvalue()
+
+    files = {"background.webp": webp(bg, 80), "thumbnail.webp": webp(thumb, 80)}
+    for f, data in files.items():
+        if len(data) &gt; (1 if f.startswith("thumbnail") else 5) * 1024 * 1024:
+            raise SystemExit(f"{f} is too large")
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("skin.json", json.dumps(manifest, ensure_ascii=False, indent=2))
+        for f, data in files.items():
+            z.writestr(f, data)
+    final = worst_decile(s, text, background, (overlay_col, manifest["overlay"]["opacity"]))
+    print(f"wrote {out} ({out.stat().st_size // 1024} KB); text contrast {final:.2f}:1; "
+          f"{'dark' if dark else 'light'} theme")
+    return manifest
+
+
+def main() -&gt; None:
+    a = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    a.add_argument("image", type=Path)
+    a.add_argument("--id", required=True)
+    a.add_argument("--name", required=True)
+    a.add_argument("--author", required=True)
+    a.add_argument("--title-font", default="Cormorant Garamond")
+    a.add_argument("--body-font", default="Literata")
+    a.add_argument("--mode", choices=["auto", "dark", "light"], default="auto")
+    a.add_argument("--out", type=Path)
+    args = a.parse_args()
+    out = args.out or args.image.with_name(f"{args.id}.zip")
+    build(args.image, args.id, args.name, args.author, args.title_font, args.body_font,
+          args.mode, out)
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+<p>If the script stops with "no overlay makes the text readable", run it again with the other <code>--mode</code>. If the user wants different names per language, edit <code>name</code> in <code>skin.json</code> inside the zip.</p>
+</section>
+
+<footer>Humaníadas · Android · <a href="index.html">Política de Privacidade</a></footer>
+</main>
+</body>
+</html>
